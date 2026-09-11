@@ -96,6 +96,9 @@ class TestPixelFunc(unittest.TestCase):
         vec = ang2vec(self.theta0, self.phi0)
         self.assertRaises(ValueError, vec2ang, vec.T)
         self.assertRaises(ValueError, vec2ang, np.zeros((1, 3, 2)))
+        theta, phi = vec2ang(np.eye(3))
+        np.testing.assert_array_almost_equal(theta, [np.pi / 2, np.pi / 2, 0.0])
+        np.testing.assert_array_almost_equal(phi, [0.0, np.pi / 2, 0.0])
 
     def test_get_interp_val_lonlat(self):
         m = np.arange(12.0)

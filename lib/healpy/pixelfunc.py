@@ -754,7 +754,8 @@ def vec2ang(vectors, lonlat=False):
     ----------
     vectors : float, array-like
       the vector(s) to convert, shape is (3,) or (N, 3);
-      2D transposed inputs with shape (3, N) and N != 3 are rejected
+      2D transposed inputs with shape (3, N) and N != 3 are rejected;
+      shape (3, 3) is interpreted as three row vectors
     lonlat : bool, optional
       If True, return angles will be longitude and latitude in degree,
       otherwise, angles will be co-latitude and longitude in radians (default)
