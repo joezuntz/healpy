@@ -774,12 +774,13 @@ def vec2ang(vectors, lonlat=False):
         if vectors.shape[0] != 3:
             raise ValueError("vectors must have shape (3,) or (N, 3)")
     elif vectors.ndim == 2:
-        if vectors.shape[0] == 3 and vectors.shape[1] not in (0, 3):
-            raise ValueError(
-                "vectors must have shape (3,) or (N, 3), not transposed (3, N)"
-            )
-        if vectors.shape[1] != 3 and not (vectors.shape[0] == 3 and vectors.shape[1] == 0):
-            raise ValueError("vectors must have shape (3,) or (N, 3)")
+        if vectors.shape[1] != 3:
+            if vectors.shape[0] == 3 and vectors.shape[1] != 0:
+                raise ValueError(
+                    "vectors must have shape (3,) or (N, 3), not transposed (3, N)"
+                )
+            if not (vectors.shape[0] == 3 and vectors.shape[1] == 0):
+                raise ValueError("vectors must have shape (3,) or (N, 3)")
     else:
         raise ValueError("vectors must have shape (3,) or (N, 3)")
     vectors = vectors.reshape(-1, 3)
