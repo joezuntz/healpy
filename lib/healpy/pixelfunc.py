@@ -753,7 +753,9 @@ def vec2ang(vectors, lonlat=False):
     Parameters
     ----------
     vectors : float, array-like
-      the vector(s) to convert, shape is (3,) or (N, 3)
+      the vector(s) to convert, shape is (3,) or (N, 3);
+      2D transposed inputs with shape (3, N) and N != 3 are rejected;
+      shape (3, 3) is interpreted as three row vectors
     lonlat : bool, optional
       If True, return angles will be longitude and latitude in degree,
       otherwise, angles will be co-latitude and longitude in radians (default)
@@ -767,6 +769,20 @@ def vec2ang(vectors, lonlat=False):
     --------
     ang2vec, rotator.vec2dir, rotator.dir2vec
     """
+    vectors = np.asarray(vectors)
+    if vectors.ndim == 1:
+        if vectors.shape[0] != 3:
+            raise ValueError("vectors must have shape (3,) or (N, 3)")
+    elif vectors.ndim == 2:
+        if vectors.shape[1] != 3:
+            if vectors.shape[0] == 3 and vectors.shape[1] != 0:
+                raise ValueError(
+                    "vectors must have shape (3,) or (N, 3), not transposed (3, N)"
+                )
+            if not (vectors.shape[0] == 3 and vectors.shape[1] == 0):
+                raise ValueError("vectors must have shape (3,) or (N, 3)")
+    else:
+        raise ValueError("vectors must have shape (3,) or (N, 3)")
     vectors = vectors.reshape(-1, 3)
     dnorm = np.sqrt(np.sum(np.square(vectors), axis=1))
     theta = np.arccos(vectors[:, 2] / dnorm)
