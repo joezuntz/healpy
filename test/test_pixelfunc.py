@@ -92,6 +92,10 @@ class TestPixelFunc(unittest.TestCase):
         np.testing.assert_array_almost_equal(lon1, self.lon0, decimal=5)
         np.testing.assert_array_almost_equal(lat1, self.lat0, decimal=5)
 
+    def test_vec2ang_rejects_transposed_vectors(self):
+        vec = ang2vec(self.theta0, self.phi0)
+        self.assertRaises(ValueError, vec2ang, vec.T)
+
     def test_get_interp_val_lonlat(self):
         m = np.arange(12.0)
         val0 = get_interp_val(m, self.theta0, self.phi0)
