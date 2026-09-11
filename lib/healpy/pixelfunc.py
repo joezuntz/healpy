@@ -769,10 +769,18 @@ def vec2ang(vectors, lonlat=False):
     ang2vec, rotator.vec2dir, rotator.dir2vec
     """
     vectors = np.asarray(vectors)
-    if vectors.ndim == 2 and vectors.shape[0] == 3 and vectors.shape[1] != 3:
-        raise ValueError(
-            "vectors must have shape (3,) or (N, 3), not transposed (3, N)"
-        )
+    if vectors.ndim == 1:
+        if vectors.shape[0] != 3:
+            raise ValueError("vectors must have shape (3,) or (N, 3)")
+    elif vectors.ndim == 2:
+        if vectors.shape[1] != 3:
+            if vectors.shape[0] == 3:
+                raise ValueError(
+                    "vectors must have shape (3,) or (N, 3), not transposed (3, N)"
+                )
+            raise ValueError("vectors must have shape (3,) or (N, 3)")
+    else:
+        raise ValueError("vectors must have shape (3,) or (N, 3)")
     vectors = vectors.reshape(-1, 3)
     dnorm = np.sqrt(np.sum(np.square(vectors), axis=1))
     theta = np.arccos(vectors[:, 2] / dnorm)

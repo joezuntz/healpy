@@ -95,6 +95,7 @@ class TestPixelFunc(unittest.TestCase):
     def test_vec2ang_rejects_transposed_vectors(self):
         vec = ang2vec(self.theta0, self.phi0)
         self.assertRaises(ValueError, vec2ang, vec.T)
+        self.assertRaises(ValueError, vec2ang, np.zeros((1, 3, 2)))
 
     def test_get_interp_val_lonlat(self):
         m = np.arange(12.0)
